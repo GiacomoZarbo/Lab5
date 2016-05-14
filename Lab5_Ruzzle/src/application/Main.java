@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
+		//ciao
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("Ruzzle.fxml"));
 			BorderPane root = (BorderPane)loader.load();
