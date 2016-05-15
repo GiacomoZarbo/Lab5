@@ -33,105 +33,103 @@ public class Ricerca {
 		boolean trovata = false;
 		if (step == 16)
 			return;
-		else {
-			if (dao.searchSequence(parola.toString().toLowerCase())) {
-				if (step >= 2 && dao.isContenutaInDizionario(parola.toString().toLowerCase())) {
-						if (paroleTrovate.contains(word))
-							trovata = true;
-					if (!trovata) {
-						word.setParola(parola.toString().toLowerCase());
-						word.setPosizioni(posizioni);
-						paroleTrovate.add(new Word(word.getParola(), new LinkedList<Integer>(posizioni)));
-					}
+		if (dao.searchSequence(parola.toString().toLowerCase())) {
+			if (step >= 2 && dao.isContenutaInDizionario(parola.toString().toLowerCase())) {
+				if (paroleTrovate.contains(word))
+					trovata = true;
+				if (!trovata) {
+					word.setParola(parola.toString().toLowerCase());
+					word.setPosizioni(posizioni);
+					paroleTrovate.add(new Word(word.getParola(), new LinkedList<Integer>(posizioni)));
 				}
-				if (j - 1 >= 0 && !matrixCharacters[i][j - 1].isUsato()) {
-					parola.append(matrixCharacters[i][j - 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i) * 4 + (j - 1));
-					matrixCharacters[i][j - 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i, j - 1, step + 1, word, posizioni);
-					matrixCharacters[i][j - 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i - 1 >= 0 && j - 1 >= 0 && !matrixCharacters[i - 1][j - 1].isUsato()) {
-					parola.append(matrixCharacters[i - 1][j - 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i - 1) * 4 + (j - 1));
-					matrixCharacters[i - 1][j - 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i - 1, j - 1, step + 1, word, posizioni);
-					matrixCharacters[i - 1][j - 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i - 1 >= 0 && !matrixCharacters[i - 1][j].isUsato()) {
-					parola.append(matrixCharacters[i - 1][j].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i - 1) * 4 + (j));
-					matrixCharacters[i - 1][j].setUsato(true);
-					cercaParola(parola, matrixCharacters, i - 1, j, step + 1, word, posizioni);
-					matrixCharacters[i - 1][j].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i - 1 >= 0 && j + 1 <= 3 && !matrixCharacters[i - 1][j + 1].isUsato()) {
-					parola.append(matrixCharacters[i - 1][j + 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i - 1) * 4 + (j + 1));
-					matrixCharacters[i - 1][j + 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i - 1, j + 1, step + 1, word, posizioni);
-					matrixCharacters[i - 1][j + 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (j + 1 <= 3 && !matrixCharacters[i][j + 1].isUsato()) {
-					parola.append(matrixCharacters[i][j + 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i) * 4 + (j + 1));
-					matrixCharacters[i][j + 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i, j + 1, step + 1, word, posizioni);
-					matrixCharacters[i][j + 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i + 1 <= 3 && j + 1 <= 3 && !matrixCharacters[i + 1][j + 1].isUsato()) {
-					parola.append(matrixCharacters[i + 1][j + 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i + 1) * 4 + (j + 1));
-					matrixCharacters[i + 1][j + 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i + 1, j + 1, step + 1, word, posizioni);
-					matrixCharacters[i + 1][j + 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i + 1 <= 3 && !matrixCharacters[i + 1][j].isUsato()) {
-					parola.append(matrixCharacters[i + 1][j].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i + 1) * 4 + (j));
-					matrixCharacters[i + 1][j].setUsato(true);
-					cercaParola(parola, matrixCharacters, i + 1, j, step + 1, word, posizioni);
-					matrixCharacters[i + 1][j].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
-				if (i + 1 <= 3 && j - 1 >= 0 && !matrixCharacters[i + 1][j - 1].isUsato()) {
-					parola.append(matrixCharacters[i + 1][j - 1].getCarattere());
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.add((i + 1) * 4 + (j - 1));
-					matrixCharacters[i + 1][j - 1].setUsato(true);
-					cercaParola(parola, matrixCharacters, i + 1, j - 1, step + 1, word, posizioni);
-					matrixCharacters[i + 1][j - 1].setUsato(false);
-					parola.deleteCharAt(parola.length() - 1);
-					word.setParola(parola.toString().toLowerCase());
-					posizioni.remove(posizioni.size() - 1);
-				}
+			}
+			if (j - 1 >= 0 && !matrixCharacters[i][j - 1].isUsato()) {
+				parola.append(matrixCharacters[i][j - 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i) * 4 + (j - 1));
+				matrixCharacters[i][j - 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i, j - 1, step + 1, word, posizioni);
+				matrixCharacters[i][j - 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i - 1 >= 0 && j - 1 >= 0 && !matrixCharacters[i - 1][j - 1].isUsato()) {
+				parola.append(matrixCharacters[i - 1][j - 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i - 1) * 4 + (j - 1));
+				matrixCharacters[i - 1][j - 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i - 1, j - 1, step + 1, word, posizioni);
+				matrixCharacters[i - 1][j - 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i - 1 >= 0 && !matrixCharacters[i - 1][j].isUsato()) {
+				parola.append(matrixCharacters[i - 1][j].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i - 1) * 4 + (j));
+				matrixCharacters[i - 1][j].setUsato(true);
+				cercaParola(parola, matrixCharacters, i - 1, j, step + 1, word, posizioni);
+				matrixCharacters[i - 1][j].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i - 1 >= 0 && j + 1 <= 3 && !matrixCharacters[i - 1][j + 1].isUsato()) {
+				parola.append(matrixCharacters[i - 1][j + 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i - 1) * 4 + (j + 1));
+				matrixCharacters[i - 1][j + 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i - 1, j + 1, step + 1, word, posizioni);
+				matrixCharacters[i - 1][j + 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (j + 1 <= 3 && !matrixCharacters[i][j + 1].isUsato()) {
+				parola.append(matrixCharacters[i][j + 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i) * 4 + (j + 1));
+				matrixCharacters[i][j + 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i, j + 1, step + 1, word, posizioni);
+				matrixCharacters[i][j + 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i + 1 <= 3 && j + 1 <= 3 && !matrixCharacters[i + 1][j + 1].isUsato()) {
+				parola.append(matrixCharacters[i + 1][j + 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i + 1) * 4 + (j + 1));
+				matrixCharacters[i + 1][j + 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i + 1, j + 1, step + 1, word, posizioni);
+				matrixCharacters[i + 1][j + 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i + 1 <= 3 && !matrixCharacters[i + 1][j].isUsato()) {
+				parola.append(matrixCharacters[i + 1][j].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i + 1) * 4 + (j));
+				matrixCharacters[i + 1][j].setUsato(true);
+				cercaParola(parola, matrixCharacters, i + 1, j, step + 1, word, posizioni);
+				matrixCharacters[i + 1][j].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
+			}
+			if (i + 1 <= 3 && j - 1 >= 0 && !matrixCharacters[i + 1][j - 1].isUsato()) {
+				parola.append(matrixCharacters[i + 1][j - 1].getCarattere());
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.add((i + 1) * 4 + (j - 1));
+				matrixCharacters[i + 1][j - 1].setUsato(true);
+				cercaParola(parola, matrixCharacters, i + 1, j - 1, step + 1, word, posizioni);
+				matrixCharacters[i + 1][j - 1].setUsato(false);
+				parola.deleteCharAt(parola.length() - 1);
+				word.setParola(parola.toString().toLowerCase());
+				posizioni.remove(posizioni.size() - 1);
 			}
 		}
 	}
