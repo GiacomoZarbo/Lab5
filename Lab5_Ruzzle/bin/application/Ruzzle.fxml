@@ -4,9 +4,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -150,13 +152,25 @@
       </GridPane>
    </left>
    <bottom>
-      <Label fx:id="lblResult" textFill="RED" BorderPane.alignment="TOP_CENTER">
-         <padding>
-            <Insets bottom="20.0" />
-         </padding>
+      <HBox BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets top="10.0" />
+            <Insets bottom="20.0" />
          </BorderPane.margin>
-      </Label>
+         <children>
+            <ProgressBar fx:id="pBar" prefHeight="18.0" prefWidth="227.0" progress="0.0">
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </ProgressBar>
+            <VBox alignment="CENTER" prefWidth="200.0">
+               <children>
+                  <Label fx:id="lblResult" textFill="RED" />
+               </children>
+               <HBox.margin>
+                  <Insets left="20.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
    </bottom>
 </BorderPane>

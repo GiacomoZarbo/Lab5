@@ -9,11 +9,15 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.ruzzle.model.Model;
 import it.polito.tdp.ruzzle.model.Word;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 
 public class RuzzleController {
 
@@ -93,39 +97,62 @@ public class RuzzleController {
 	private Label lblResult;
 
 	@FXML
+	private ProgressBar pBar;
+
+	@FXML
 	void doGenerateRandomRuzzle(ActionEvent event) {
-		lblResult.setText("");
 		for (Label l : labels)
 			l.setStyle("-fx-background-color: green");
 		listView.getItems().clear();
 		words.clear();
 		model.generateRandomRuzzle(labels);
-		words = model.trovaParole(labels);
-		Collections.sort(words, new RuzzleController.ComparatoreWords());
-		for (Word w : words)
-			listView.getItems().add(w.getParola().toString().toLowerCase());
-		creata = true;
-		lblResult.setText("Tavola creata.");
+		Task<List<Word>> task = new Task<List<Word>>() {
+			@Override
+			protected List<Word> call() throws Exception {
+				long start = System.nanoTime();
+				updateProgress(-1, -1);
+				updateMessage("Cercando le parole...");
+				List<Word> parole = model.trovaParole(labels);
+				long end = System.nanoTime();
+				updateProgress(1, 1);
+				updateMessage("Lista completata! Time: " + (end - start) / 1000000 + " ms.");
+				btnShow.setDisable(false);
+				return parole;
+			}
+		};
+
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				words = task.getValue();
+				Collections.sort(words, new RuzzleController.ComparatoreWords());
+				for (Word w : words)
+					listView.getItems().add(w.getParola().toString().toLowerCase());
+				creata = true;
+			}
+		});
+
+		pBar.progressProperty().bind(task.progressProperty());
+		lblResult.textProperty().bind(task.messageProperty());
+
+		Thread th = new Thread(task);
+		th.setDaemon(true);
+		th.start();
 	}
 
 	@FXML
 	void doShow(ActionEvent event) {
-		lblResult.setText("");
 		if (creata) {
 			for (Label l : labels)
 				l.setStyle("-fx-background-color: green");
 			int index = listView.getSelectionModel().getSelectedIndex();
 			if (index >= 0) {
 				Word word = words.get(index);
-				for (Integer i : word.getPosizioni()) {
+				for (Integer i : word.getPosizioni())
 					labels.get(i).setStyle("-fx-background-color: red");
-				}
-				lblResult.setText("Fatto.");
-			} else {
-				lblResult.setText("Selezionare una parola.");
-			}
-		} else
-			lblResult.setText("Creare una tavola Random Ruzzle.");
+			} else
+				lblResult.setText("Creare una tavola Random Ruzzle.");
+		}
 	}
 
 	@FXML
@@ -149,11 +176,13 @@ public class RuzzleController {
 		assert lbl13 != null : "fx:id=\"lbl13\" was not injected: check your FXML file 'Ruzzle.fxml'.";
 		assert lbl14 != null : "fx:id=\"lbl14\" was not injected: check your FXML file 'Ruzzle.fxml'.";
 		assert lbl15 != null : "fx:id=\"lbl15\" was not injected: check your FXML file 'Ruzzle.fxml'.";
+		assert pBar != null : "fx:id=\"pBar\" was not injected: check your FXML file 'Ruzzle.fxml'.";
 		assert lblResult != null : "fx:id=\"lblResult\" was not injected: check your FXML file 'Ruzzle.fxml'.";
 
 		words = new LinkedList<Word>();
 		labels = new LinkedList<Label>();
 		creata = false;
+		btnShow.setDisable(true);
 
 		labels.add(lbl0);
 		labels.add(lbl1);

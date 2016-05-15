@@ -36,8 +36,7 @@ public class Ricerca {
 		else {
 			if (dao.searchSequence(parola.toString().toLowerCase())) {
 				if (step >= 2 && dao.isContenutaInDizionario(parola.toString().toLowerCase())) {
-					for (Word w : paroleTrovate)
-						if (w.getParola().compareTo(parola.toString().toLowerCase()) == 0)
+						if (paroleTrovate.contains(word))
 							trovata = true;
 					if (!trovata) {
 						word.setParola(parola.toString().toLowerCase());
