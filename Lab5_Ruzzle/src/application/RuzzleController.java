@@ -115,7 +115,8 @@ public class RuzzleController {
 				List<Word> parole = model.trovaParole(labels);
 				long end = System.nanoTime();
 				updateProgress(1, 1);
-				updateMessage("Lista completata! Time: " + (end - start) / 1000000 + " ms.");
+				updateMessage("Lista completata! Time: " + (end - start) / 1000000 + " ms.\nTrovate " + parole.size()
+						+ " parole.");
 				btnShow.setDisable(false);
 				return parole;
 			}
@@ -203,13 +204,11 @@ public class RuzzleController {
 	}
 
 	public class ComparatoreWords implements Comparator<Word> {
-
 		@Override
 		public int compare(Word arg0, Word arg1) {
 			if (arg0.getParola().length() == arg1.getParola().length())
 				return arg0.getParola().compareTo(arg1.getParola());
 			return arg0.getParola().length() - arg1.getParola().length();
 		}
-
 	}
 }
